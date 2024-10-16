@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import MarsWeather from './components/MarsWeather';
+import RandomMeal from './components/RandomMeal';
+import YodaTranslator from './components/YodaTranslator';
+import './style.css';
 
-function App() {
+const App = () => {
+  const [component, setComponent] = useState('home');
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <h1>API Component Page</h1>
+        <nav>
+          <button onClick={() => setComponent('marsWeather')}>Mars Weather</button>
+          <button onClick={() => setComponent('randomMeal')}>Random Meal</button>
+          <button onClick={() => setComponent('yodaTranslator')}>Yoda Translator</button>
+        </nav>
       </header>
+
+      <main>
+        {component === 'marsWeather' && <MarsWeather />}
+        {component === 'randomMeal' && <RandomMeal />}
+        {component === 'yodaTranslator' && <YodaTranslator />}
+      </main>
     </div>
   );
-}
+};
 
 export default App;
