@@ -1,33 +1,41 @@
-import React, { useState } from 'react';
+'use client'; // Ensures the component is client-side
+
+import React, { useState, useEffect } from 'react';
 
 const MarsWeather = () => {
-    const [weather, setWeather] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [weather, setWeather] = useState(null); // Manage weather data state
+    const [loading, setLoading] = useState(true); // Loading state
 
-    const getMarsWeather = async () => {
-        setLoading(true);
+    useEffect(() => {
+        // Fetch Mars weather when component mounts
+        fetchMarsWeather();
+    }, []);
+
+    const fetchMarsWeather = async () => {
         try {
             const response = await fetch('https://api.maas2.apollorion.com/');
             const data = await response.json();
-            setWeather(data);
+            setWeather(data); // Set the weather data
         } catch (error) {
             console.error('Error fetching Mars weather:', error);
+        } finally {
+            setLoading(false); // Stop loading once the data is fetched
         }
-        setLoading(false);
     };
 
     return (
         <div className="mars-weather-container component">
             <h2>Mars Weather</h2>
-            <button onClick={getMarsWeather}>
-                {loading ? 'Fetching...' : 'Fetch Mars Weather'}
-            </button>
-            {weather && (
-                <div className="weather-card">
-                    <h3>Mars Weather Report</h3>
-                    <p>Temperature: {weather.atmo_opacity}</p>
-                    <p>Season: {weather.season}</p>
-                </div>
+            {loading ? (
+                <p>Loading...</p> // Show loading state
+            ) : (
+                weather && (
+                    <div className="weather-card">
+                        <h3>Mars Weather Report</h3>
+                        <p>Temperature: {weather.atmo_opacity}</p>
+                        <p>Season: {weather.season}</p>
+                    </div>
+                )
             )}
         </div>
     );

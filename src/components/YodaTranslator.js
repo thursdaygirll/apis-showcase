@@ -1,22 +1,24 @@
+'use client'; // Ensures the component is client-side
+
 import React, { useState } from 'react';
 
 const YodaTranslator = () => {
-    const [input, setInput] = useState('');
-    const [translated, setTranslated] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [input, setInput] = useState(''); // Manage input state
+    const [translated, setTranslated] = useState(''); // Manage translation state
+    const [loading, setLoading] = useState(false); // Loading state
 
-    const getYodaTranslation = async () => {
-        setLoading(true);
+    const translateToYoda = async () => {
+        if (!input) return; // Do nothing if input is empty
+        setLoading(true); // Start loading
         try {
-            const response = await fetch(
-                `https://api.funtranslations.com/translate/yoda.json?text=${input}`
-            );
+            const response = await fetch(`https://api.funtranslations.com/translate/yoda.json?text=${input}`);
             const data = await response.json();
-            setTranslated(data.contents.translated);
+            setTranslated(data.contents.translated); // Set translated text
         } catch (error) {
-            console.error('Error translating to Yoda:', error);
+            console.error('Error translating text:', error);
+        } finally {
+            setLoading(false); // Stop loading once translation is done
         }
-        setLoading(false);
     };
 
     return (
@@ -25,11 +27,11 @@ const YodaTranslator = () => {
             <input
                 type="text"
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => setInput(e.target.value)} // Update input state on change
                 placeholder="Enter text"
             />
-            <button onClick={getYodaTranslation}>
-                {loading ? 'Translating...' : 'Translate to Yoda'}
+            <button onClick={translateToYoda}>
+                {loading ? 'Translating...' : 'Translate to Yoda'} 
             </button>
             {translated && (
                 <div className="yoda-card">
